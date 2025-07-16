@@ -3,32 +3,24 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const confing = new DocumentBuilder()
-    .setTitle('API de Usuários')
-        .setDescription('Documentação da API de usuários com NestJS + Prisma + Swagger')
-        .setVersion('1.0')
-        .addTag('users')
-        .addBearerAuth({//Esquema jwt Bearer
-          type:'http',
-          scheme
-        
-        
-        
-        
-        
-        
-        })
+  const app = await NestFactory.create(AppModule)
+  const config = new DocumentBuilder()
+  .setTitle('API de Users')
+  .setDescription('Documentação da API de usuários com NestJS + Prisma + Swagger')
+  .setVersion('1.0')
+  .addTag('users')
+  .addBearerAuth({ // Esquema JWT Baerer
+    type:'http',
+    scheme: 'bearer',
+    name: 'Authorizarion',
+    in: 'header'
+  })
+  .build()
 
+  const document = SwaggerModule.createDocument(app, config)
+  
+  SwaggerModule.setup('api', app, document)
 
-
-        .build();
- 
-      const document = SwaggerModule.createDocument(app, confing);
-
-      SwaggerModule.setup('api', app, document)
-
-      await app.listen(3000)
-   
+  await app.listen(3000)
 }
 bootstrap();
