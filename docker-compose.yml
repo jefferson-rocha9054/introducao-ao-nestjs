@@ -1,17 +1,28 @@
 services:
 
   postgres:
-    image: postgres 
+    image: postgres
     container_name: postgresdb
     environment:
       POSTGRES_USER: jeffersondb
       POSTGRES_PASSWORD: passworddb
       POSTGRES_DB: nestdb
     ports:
-    - "5432:5432"
+      - "5432:5432"
 
-
-
-
-
-
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: nest-api
+    env_file: .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: ${DATABASE_URL_CONTAINER}
+      CLOUDINARY_NAME: ${CLOUDINARY_CLOUD_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+    command: sh -c "npx prisma migrate deploy && npm run start:prod"

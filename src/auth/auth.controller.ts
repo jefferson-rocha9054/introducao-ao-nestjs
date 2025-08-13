@@ -5,10 +5,11 @@ import { ApiBody, ApiConflictResponse, ApiCreatedResponse } from '@nestjs/swagge
 import { LoginDto } from './dto/login.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 
-
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService){}
+    constructor(
+    private authService: AuthService,
+    ){}
     
     @Post('register')
     @ApiBody({type: RegisterDto})
@@ -27,6 +28,9 @@ export class AuthController {
     async login(@Body() credentials: LoginDto): Promise<LoginResponseDto>{
         return this.authService.login(credentials)
     }
+
+ 
+
 
 }
 

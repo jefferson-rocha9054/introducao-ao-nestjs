@@ -1,0 +1,21 @@
+
+
+FROM node:20-alpine
+
+
+WORKDIR /app
+
+# Etapa 03: Copiar arquivos de depedencia
+COPY package.json /.
+COPY package-lock.json /.
+# COPY package*.json /.
+RUN npm install
+
+# Etapa 04: copiar o restante dos arquivos
+COPY . .
+RUN npx prisma generate
+RUN npm run build
+
+
+# Etapa 05: Export a porta da aplicação
+EXPOSE 3000
