@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { Place } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { ImageObject } from './types/image-object';
 import { CloudinaryService } from './cloudinary.service';
 
@@ -46,11 +46,10 @@ export class PlaceService {
 
     let imagens = place.imagens as ImageObject[];
     
-    // Se forem enviadas novas imagens
     if (newImages && newImages.length > 0) {
-      // Deletar imagens antigas
+
       await Promise.all(imagens.map(img => this.cloudinaryService.deleteImage(img.public_id)));
-      // Upload das novas imagens
+      
       imagens = await Promise.all(newImages.map(file => this.cloudinaryService.uploadImage(file)));
     }
 
